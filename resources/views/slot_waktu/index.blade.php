@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Data Labor</title>
+  <title>Slot Waktu</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 min-h-screen">
 
   <!-- Navbar -->
   <nav class="bg-white border-b border-gray-200 shadow-md">
@@ -65,53 +65,57 @@
     </div>
   </nav>
 
-  <!-- Main Content -->
-  <div class="container mx-auto px-4 py-6">
-    <h1 class="text-2xl font-bold mb-6">Data Labor</h1>
-    <a href="{{ route('labors.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-medium px-4 py-2 rounded mb-4 inline-block">
-      Tambah Labor
-    </a>
-    <div class="overflow-x-auto">
-      <table class="table-auto border-collapse border border-gray-200 w-full text-left">
-        <thead class="bg-gray-100">
-          <tr>
-            <th class="border border-gray-300 px-4 py-2">No</th>
-            <th class="border border-gray-300 px-4 py-2">Nama</th>
-            <th class="border border-gray-300 px-4 py-2">Lokasi</th>
-            <th class="border border-gray-300 px-4 py-2">Kapasitas</th>
-            <th class="border border-gray-300 px-4 py-2">Foto</th>
-            <th class="border border-gray-300 px-4 py-2 text-center">Aksi</th>
+  <!-- Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white shadow-lg rounded-lg p-6">
+      <h1 class="text-2xl font-bold mb-6 text-gray-800">Slot Waktu</h1>
+
+      <!-- Add Button -->
+      <div class="flex justify-between mb-4">
+        <a href="{{ route('slot_waktu.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-medium px-4 py-2 rounded-md">
+          Tambah Slot Waktu
+        </a>
+      </div>
+
+      <!-- Table -->
+      <table class="w-full table-auto border-collapse border border-gray-200">
+        <thead>
+          <tr class="bg-gray-100 text-gray-800">
+            <th class="border border-gray-200 py-2 px-4 text-left">Start Time</th>
+            <th class="border border-gray-200 py-2 px-4 text-left">End Time</th>
+            <th class="border border-gray-200 py-2 px-4 text-left">Status</th>
+            <th class="border border-gray-200 py-2 px-4 text-left">Actions</th>
           </tr>
         </thead>
         <tbody>
-          @forelse ($labors as $labor)
-          <tr>
-            <td class="border border-gray-300 px-4 py-2">{{ $loop->iteration }}</td>
-            <td class="border border-gray-300 px-4 py-2">{{ $labor->name }}</td>
-            <td class="border border-gray-300 px-4 py-2">{{ $labor->location }}</td>
-            <td class="border border-gray-300 px-4 py-2">{{ $labor->capacity }}</td>
-            <td class="border border-gray-300 px-4 py-2 text-center">
-              @if ($labor->photo)
-                <img src="{{ asset($labor->photo) }}" alt="{{ $labor->name }}" class="w-16 h-16 rounded-full object-cover mx-auto">
-              @else
-                <span class="text-gray-500">Tidak ada foto</span>
-              @endif
-            </td>
-            <td class="border border-gray-300 px-4 py-2 text-center">
-              <a href="{{ route('labors.show', $labor->id) }}" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">Detail</a>
-              <a href="{{ route('labors.edit', $labor->id) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">Edit</a>
-              <form action="{{ route('labors.destroy', $labor->id) }}" method="POST" style="display: inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm" onclick="return confirm('Hapus labor ini?')">Hapus</button>
-              </form>
-            </td>
-          </tr>
-          @empty
-          <tr>
-            <td colspan="6" class="border border-gray-300 px-4 py-2 text-center text-gray-500">Tidak ada data labor.</td>
-          </tr>
-          @endforelse
+          @foreach ($slotWaktus as $slot)
+            <tr class="text-gray-700 hover:bg-gray-50">
+              <td class="border border-gray-200 py-2 px-4">{{ $slot->start_time }}</td>
+              <td class="border border-gray-200 py-2 px-4">{{ $slot->end_time }}</td>
+              <td class="border border-gray-200 py-2 px-4">
+                <span class="px-3 py-1 rounded-full text-sm {{ $slot->is_available ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                  {{ $slot->is_available ? 'Available' : 'Not Available' }}
+                </span>
+              </td>
+              <td class="border border-gray-200 py-2 px-4">
+                <div class="flex items-center space-x-2">
+                  <a href="{{ route('slot_waktu.edit', $slot->id) }}"
+                    class="bg-yellow-500 hover:bg-yellow-600 text-white font-medium px-3 py-1 rounded-md">
+                    Edit
+                  </a>
+                  <form action="{{ route('slot_waktu.destroy', $slot->id) }}" method="POST" class="inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit"
+                            onclick="return confirm('Yakin ingin menghapus slot waktu ini?')"
+                            class="bg-red-500 hover:bg-red-600 text-white font-medium px-3 py-1 rounded-md">
+                      Delete
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          @endforeach
         </tbody>
       </table>
     </div>
