@@ -2,7 +2,65 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminLaborController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\PinjamController;
 
+
+/* -------------------- Admin Labor Route ----------------- */
+Route::prefix('adminlabor')->group(function () {
+    // Login Routes
+    Route::get('/login', [AdminLaborController::class, 'Index'])->name('adminlabor.login');
+    Route::post('/login', [AdminLaborController::class, 'Login'])->name('adminlabor.login.submit');
+
+    // Dashboard Route - mengarah ke index.blade.php
+    Route::get('/dashboard', [AdminLaborController::class, 'Dashboard'])->name('adminlabor.dashboard');
+    // Logout Route
+    Route::post('/logout', [AdminLaborController::class, 'logout'])->name('adminlabor.logout');
+});
+/* -------------------- End Admin Labor Route ----------------- */
+
+
+
+
+
+/* -------------------- Admin Route ----------------- */
+Route::prefix('admin')->group(function () {
+
+    Route::get('/login', [AdminController::class, 'Index'])->name('login_form');
+    Route::post('/login/owner', [AdminController::class, 'Login'])->name('admin.login');
+
+    // Admin Dashboard Route tanpa middleware
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+    Route::middleware(['auth:admin'])->group(function () {
+        Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+        Route::get('/settings', [ProfileController::class, 'index'])->name('admin.settings');
+        Route::get('/reports', [ReportController::class, 'index'])->name('admin.reports.index');
+        Route::get('/admin-labor/create', [AdminController::class, 'createAdminLabor'])->name('admin-labor.create');
+        Route::get('/user/create', [AdminController::class, 'createUser'])->name('user.create');
+    });
+    Route::resource('admin_labors', AdminLaborController::class);
+});
+
+/* -------------------- End Admin Route ----------------- */
+
+
+/* -------------------Pinjam User--------------------*/
+
+// Route untuk modul Pinjam
+Route::prefix('user/pinjam')->name('user.pinjam.')->group(function () {
+    Route::get('/', [PinjamController::class, 'index'])->name('index');
+});
+
+
+
+
+
+
+/* ---------------------End Pinjam User ---------------------- */
 Route::get('/', function () {
     return view('welcome');
 });
