@@ -34,7 +34,7 @@
           <a href="{{ route('slot_waktu.index') }}" class="text-gray-700 hover:text-gray-900 font-medium">
             Slot Waktu
           </a>
-          <a href="{{ route('adminlabor.dashboard') }}" class="text-gray-700 hover:text-gray-900 font-medium">
+          <a href="{{ route('laporan.index') }}" class="text-gray-700 hover:text-gray-900 font-medium">
             Laporan
           </a>
         </div>
