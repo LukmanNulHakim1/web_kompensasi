@@ -11,6 +11,7 @@ use App\Http\Controllers\LaborController;
 use App\Http\Controllers\SlotWaktuController;
 use App\Http\Controllers\JadwalBokingController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\CreateAdminLaborController;
 
 
 /* -------------------- Admin Labor Route ----------------- */
@@ -58,6 +59,11 @@ Route::prefix('admin')->group(function () {
     });
     Route::resource('admin_labors', AdminLaborController::class);
 });
+
+Route::resource('create_admin_labor', CreateAdminLaborController::class);
+//Route Create Admin Labor
+Route::resource('admin_labor', CreateAdminLaborController::class);
+
 
 /* -------------------- End Admin Route ----------------- */
 

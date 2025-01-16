@@ -26,7 +26,7 @@ class AdminController extends Controller
     // Create Admin Labor Page
     public function createAdminLabor()
     {
-        return view('admin.create_admin_labor.index'); // Pastikan ada view 'create_admin_labor'
+        return view('create_admin_labor.index'); // Pastikan ada view 'create_admin_labor'
     }
 
     // Create User Page

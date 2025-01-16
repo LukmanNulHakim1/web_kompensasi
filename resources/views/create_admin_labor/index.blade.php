@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Labors</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
 </head>
 <body class="bg-gray-50">
 
@@ -25,7 +26,7 @@
           <a href="{{ route('admin.dashboard') }}" class="text-gray-700 hover:text-gray-900 font-medium">
             Dashboard
           </a>
-          <a href="{{ route('admin-labor.create') }}" class="text-gray-700 hover:text-gray-900 font-medium">
+          <a href="{{ route('create_admin_labor.create') }}" class="text-gray-700 hover:text-gray-900 font-medium">
             Admin Labor
           </a>
           <a href="{{ route('user.create') }}" class="text-gray-700 hover:text-gray-900 font-medium">
@@ -72,6 +73,60 @@
     </div>
   </nav>
 
+  <!-- Content Section -->
+  <div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="h3">Admin Labors</h1>
+      <a href="{{ route('create_admin_labor.create') }}" class="btn btn-primary">Create Admin Labor</a>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @isset($data)
+            @php
+            $htmlRows = '';
+            foreach ($data as $adminLabor) {
+                $htmlRows .= "
+                    <tr>
+                        <td>{$adminLabor->name}</td>
+                        <td>{$adminLabor->email}</td>
+                        <td class='text-center'>
+                            <div class='d-flex justify-content-center gap-2'>
+                                <a href='".route('create_admin_labor.show', $adminLabor->id)."' class='btn btn-info btn-sm'>Show</a>
+                                <a href='".route('create_admin_labor.edit', $adminLabor->id)."' class='btn btn-warning btn-sm'>Edit</a>
+                                <form action='".route('create_admin_labor.destroy', $adminLabor->id)."' method='POST' onsubmit='return confirm(\"Are you sure you want to delete this admin labor?\");'>
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type='submit' class='btn btn-danger btn-sm'>Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>";
+            }
+            echo $htmlRows;
+            @endphp
+          @else
+            <tr>
+              <td colspan="3" class="text-center">
+                <div class="alert alert-info m-0">No admin labors found.</div>
+              </td>
+            </tr>
+          @endisset
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
   <script>
     function toggleDropdown() {
       const dropdown = document.getElementById('dropdown');
@@ -79,6 +134,5 @@
       dropdown.classList.toggle('hidden', !isHidden);
     }
   </script>
-
 </body>
 </html>
