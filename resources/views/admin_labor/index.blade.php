@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard</title>
+  <title>Dashboard Adminlabor</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50">
@@ -12,16 +12,14 @@
   <nav class="bg-white border-b border-gray-200 shadow-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16 items-center">
-
         <!-- Logo -->
         <div class="flex items-center space-x-4">
           <a href="{{ route('admin.dashboard') }}" class="text-xl font-semibold text-gray-800">
             Logo
           </a>
         </div>
-
-        <!-- Navigation Links -->
-        <div class="hidden sm:flex sm:space-x-8">
+        <!-- Navigation Links - Diletakkan di tengah -->
+        <div class="hidden sm:flex flex-grow justify-center space-x-8">
           <a href="{{ route('adminlabor.dashboard') }}" class="text-gray-700 hover:text-gray-900 font-medium">
             Dashboard
           </a>
@@ -37,40 +35,79 @@
           <a href="{{ route('laporan.index') }}" class="text-gray-700 hover:text-gray-900 font-medium">
             Laporan
           </a>
-
         </div>
-
-        <!-- Profile Dropdown -->
-        <div class="relative flex items-center">
-          <button onclick="toggleDropdown()" class="flex items-center text-gray-700 hover:text-gray-900 font-medium px-4 py-2 rounded-md focus:outline-none">
-            Admin
-            <svg class="ml-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-          </button>
-
-          <!-- Dropdown Menu -->
-          <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg hidden">
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              Profile
-            </a>
-            <form method="POST" action="{{ route('logout') }}">
-              @csrf
-              <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                Log Out
-              </button>
-            </form>
-          </div>
+        <!-- User Profile and Logout -->
+        <div class="flex items-center space-x-6">
+          <a href="{{ route('admin_labor.profile') }}" class="text-gray-700 hover:text-gray-900 font-medium">Profil</a>
+          <a href="{{ route('adminlabor.login') }}" class="text-red-600 hover:text-red-800 font-medium">Logout</a>
         </div>
       </div>
     </div>
   </nav>
 
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Dashboard Adminlabor</h1>
+
+    <!-- Statistik Cepat -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Total User -->
+      <div class="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
+        <h2 class="text-sm font-medium text-gray-600">Total User</h2>
+        <p class="text-3xl font-semibold text-indigo-600">{{ $totalUsers }}</p>
+      </div>
+
+      <!-- Total Labor -->
+      <div class="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
+        <h2 class="text-sm font-medium text-gray-600">Total Labor</h2>
+        <p class="text-3xl font-semibold text-green-600">{{ $totalLabors }}</p>
+      </div>
+
+      <!-- Jadwal Aktif -->
+      <div class="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
+        <h2 class="text-sm font-medium text-gray-600">Jadwal Boking Aktif</h2>
+        <p class="text-3xl font-semibold text-blue-600">{{ $jadwalAktif }}</p>
+      </div>
+
+      <!-- Jadwal Pending -->
+      <div class="bg-white shadow-lg rounded-lg p-6 flex flex-col items-center">
+        <h2 class="text-sm font-medium text-gray-600">Jadwal Boking Pending</h2>
+        <p class="text-3xl font-semibold text-yellow-600">{{ $jadwalPending }}</p>
+      </div>
+    </div>
+
+    <!-- Grafik -->
+    <div class="bg-white shadow-lg rounded-lg p-6 mt-8">
+      <h2 class="text-sm font-medium text-gray-600 mb-4">Jumlah Boking per Bulan</h2>
+      <canvas id="bookingChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Script untuk Grafik -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    function toggleDropdown() {
-      const dropdown = document.getElementById('dropdown');
-      dropdown.classList.toggle('hidden');
-    }
+    const ctx = document.getElementById('bookingChart').getContext('2d');
+    const bookingChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: @json($months), // ['Jan', 'Feb', 'Mar', ...]
+        datasets: [{
+          label: 'Jumlah Boking',
+          data: @json($bookingsPerMonth), // [10, 20, 30, ...]
+          backgroundColor: 'rgba(54, 162, 235, 0.6)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
   </script>
 
 </body>

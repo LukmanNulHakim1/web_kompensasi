@@ -23,6 +23,7 @@ Route::prefix('adminlabor')->group(function () {
     Route::get('/dashboard', [AdminLaborController::class, 'Dashboard'])->name('adminlabor.dashboard');
     // Logout Route
     Route::post('/logout', [AdminLaborController::class, 'logout'])->name('adminlabor.logout');
+    Route::get('/adminlabor/profile', [AdminLaborController::class, 'profile'])->name('admin_labor.profile');
 });
 
 //Route Labor========================>

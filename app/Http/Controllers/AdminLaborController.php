@@ -15,8 +15,26 @@ class AdminLaborController extends Controller
 
     public function dashboard()
     {
-        // Mengarah ke views/admin_labor/index.blade.php
-        return view('admin_labor.index');
+        $totalUsers = \App\Models\User::count();
+        $totalLabors = \App\Models\Labor::count();
+        $jadwalAktif = \App\Models\JadwalBoking::where('status', 'confirmed')->count();
+        $jadwalPending = \App\Models\JadwalBoking::where('status', 'pending')->count();
+
+        $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $bookingsPerMonth = \App\Models\JadwalBoking::selectRaw('MONTH(date) as month, COUNT(*) as count')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('count')
+            ->toArray();
+
+        return view('admin_labor.index', compact(
+            'totalUsers',
+            'totalLabors',
+            'jadwalAktif',
+            'jadwalPending',
+            'months',
+            'bookingsPerMonth'
+        ));
     }
 
     public function login(Request $request)
@@ -33,6 +51,12 @@ class AdminLaborController extends Controller
         return back()->withErrors([
             'email' => 'Invalid credentials.',
         ]);
+    }
+
+    public function profile()
+    {
+        // Logika untuk menampilkan halaman profil admin
+        return view('admin_labor.profile'); // Gantilah dengan view yang sesuai
     }
 
     public function logout()
