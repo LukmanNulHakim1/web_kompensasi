@@ -9,6 +9,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PinjamController;
 use App\Http\Controllers\LaborController;
 use App\Http\Controllers\SlotWaktuController;
+use App\Http\Controllers\JadwalBokingController;
 
 
 /* -------------------- Admin Labor Route ----------------- */
@@ -26,6 +27,7 @@ Route::prefix('adminlabor')->group(function () {
 //Route Labor========================>
 Route::resource('labors', LaborController::class);
 //Route Jadwal Boking=================>
+Route::resource('jadwal_boking', JadwalBokingController::class);
 //Route Slot Waktu====================>
 Route::resource('slot_waktu', SlotWaktuController::class);
 /* -------------------- End Admin Labor Route ----------------- */

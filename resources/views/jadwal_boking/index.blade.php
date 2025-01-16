@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slot Waktu</title>
+  <title>Jadwal Boking</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gray-50">
 
   <!-- Navbar -->
   <nav class="bg-white border-b border-gray-200 shadow-md">
@@ -65,54 +65,47 @@
     </div>
   </nav>
 
-  <!-- Content -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="bg-white shadow-lg rounded-lg p-6">
-      <h1 class="text-2xl font-bold mb-6 text-gray-800">Slot Waktu</h1>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Jadwal Boking</h1>
 
-      <!-- Add Button -->
-      <div class="flex justify-between mb-4">
-        <a href="{{ route('slot_waktu.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-medium px-4 py-2 rounded-md">
-          Tambah Slot Waktu
-        </a>
-      </div>
+    <a href="{{ route('jadwal_boking.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-medium px-4 py-2 rounded-md mb-4 inline-block">
+        Tambah Jadwal Boking
+    </a>
 
-      <!-- Table -->
-      <table class="w-full table-auto border-collapse border border-gray-200">
-        <thead>
-          <tr class="bg-gray-100 text-gray-800">
-            <th class="border border-gray-200 py-2 px-4 text-left">Start Time</th>
-            <th class="border border-gray-200 py-2 px-4 text-left">End Time</th>
-            <th class="border border-gray-200 py-2 px-4 text-left">Status</th>
-            <th class="border border-gray-200 py-2 px-4 text-left">Actions</th>
+    <div class="overflow-x-auto bg-white shadow-lg rounded-lg">
+      <table class="min-w-full table-auto border-collapse border border-gray-200">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">User</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Labor</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Slot Waktu</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Date</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
           </tr>
         </thead>
         <tbody>
-          @foreach ($slotWaktus as $slot)
-            <tr class="text-gray-700 hover:bg-gray-50">
-              <td class="border border-gray-200 py-2 px-4">{{ $slot->start_time }}</td>
-              <td class="border border-gray-200 py-2 px-4">{{ $slot->end_time }}</td>
-              <td class="border border-gray-200 py-2 px-4">
-                <span class="px-3 py-1 rounded-full text-sm {{ $slot->is_available ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                  {{ $slot->is_available ? 'Available' : 'Not Available' }}
+          @foreach ($jadwalBokings as $jadwal)
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4 text-sm text-gray-800">{{ $jadwal->user->name }}</td>
+              <td class="px-6 py-4 text-sm text-gray-800">{{ $jadwal->labor->name }}</td>
+              <td class="px-6 py-4 text-sm text-gray-800">{{ $jadwal->slotWaktu->start_time }} - {{ $jadwal->slotWaktu->end_time }}</td>
+              <td class="px-6 py-4 text-sm text-gray-800">{{ $jadwal->date }}</td>
+              <td class="px-6 py-4 text-sm text-gray-800">
+                <span class="px-3 py-1 rounded-full text-sm {{ $jadwal->status == 'confirmed' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                  {{ ucfirst($jadwal->status) }}
                 </span>
               </td>
-              <td class="border border-gray-200 py-2 px-4">
-                <div class="flex items-center space-x-2">
-                  <a href="{{ route('slot_waktu.edit', $slot->id) }}"
-                    class="bg-yellow-500 hover:bg-yellow-600 text-white font-medium px-3 py-1 rounded-md">
-                    Edit
-                  </a>
-                  <form action="{{ route('slot_waktu.destroy', $slot->id) }}" method="POST" class="inline">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit"
-                            onclick="return confirm('Yakin ingin menghapus slot waktu ini?')"
-                            class="bg-red-500 hover:bg-red-600 text-white font-medium px-3 py-1 rounded-md">
-                      Delete
-                    </button>
-                  </form>
-                </div>
+              <td class="px-6 py-4 text-sm text-gray-800">
+                <a href="{{ route('jadwal_boking.show', $jadwal->id) }}" class="text-green-500 hover:text-green-700 mr-4">Detail</a>
+                <a href="{{ route('jadwal_boking.edit', $jadwal->id) }}" class="text-blue-500 hover:text-blue-700 mr-4">Edit</a>
+                <form action="{{ route('jadwal_boking.destroy', $jadwal->id) }}" method="POST" class="inline">
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit" onclick="return confirm('Yakin ingin menghapus jadwal boking ini?')" class="text-red-500 hover:text-red-700">
+                    Delete
+                  </button>
+                </form>
               </td>
             </tr>
           @endforeach

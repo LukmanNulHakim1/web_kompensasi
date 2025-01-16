@@ -28,7 +28,7 @@
           <a href="{{ route('labors.index') }}" class="text-gray-700 hover:text-gray-900 font-medium">
             Labor
           </a>
-          <a href="{{ route('adminlabor.dashboard') }}" class="text-gray-700 hover:text-gray-900 font-medium">
+          <a href="{{ route('jadwal_boking.index') }}" class="text-gray-700 hover:text-gray-900 font-medium">
             Jadwal Boking
           </a>
           <a href="{{ route('slot_waktu.index') }}" class="text-gray-700 hover:text-gray-900 font-medium">
