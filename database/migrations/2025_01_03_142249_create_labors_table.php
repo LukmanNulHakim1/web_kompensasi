@@ -16,13 +16,18 @@ return new class extends Migration
             $table->string('name');
             $table->string('location');
             $table->integer('capacity');
+            $table->string('photo')->nullable(); // Kolom untuk path foto, bisa null
+            $table->text('description')->nullable(); // Tambahkan kolom deskripsi
+            $table->text('facilities')->nullable(); // Tambahkan kolom fasilitas
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down()
     {
         Schema::dropIfExists('labors');
     }
-
 };

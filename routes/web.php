@@ -7,6 +7,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminLaborController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\PinjamController;
+use App\Http\Controllers\LaborController;
+
 
 
 /* -------------------- Admin Labor Route ----------------- */
@@ -20,6 +22,11 @@ Route::prefix('adminlabor')->group(function () {
     // Logout Route
     Route::post('/logout', [AdminLaborController::class, 'logout'])->name('adminlabor.logout');
 });
+
+//Route Labor========================>
+Route::resource('labors', LaborController::class);
+//Route Jadwal Boking=================>
+
 /* -------------------- End Admin Labor Route ----------------- */
 
 
@@ -48,19 +55,21 @@ Route::prefix('admin')->group(function () {
 /* -------------------- End Admin Route ----------------- */
 
 
+
+
+
 /* -------------------Pinjam User--------------------*/
 
 // Route untuk modul Pinjam
 Route::prefix('user/pinjam')->name('user.pinjam.')->group(function () {
     Route::get('/', [PinjamController::class, 'index'])->name('index');
 });
-
-
-
-
-
-
 /* ---------------------End Pinjam User ---------------------- */
+
+
+
+
+
 Route::get('/', function () {
     return view('welcome');
 });

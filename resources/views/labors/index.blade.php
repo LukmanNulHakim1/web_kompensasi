@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard</title>
+  <title>Data Labor</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50">
@@ -37,7 +37,6 @@
           <a href="{{ route('adminlabor.dashboard') }}" class="text-gray-700 hover:text-gray-900 font-medium">
             Laporan
           </a>
-
         </div>
 
         <!-- Profile Dropdown -->
@@ -66,12 +65,63 @@
     </div>
   </nav>
 
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold mb-6">Data Labor</h1>
+    <a href="{{ route('labors.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-medium px-4 py-2 rounded mb-4 inline-block">
+      Tambah Labor
+    </a>
+    <div class="overflow-x-auto">
+      <table class="table-auto border-collapse border border-gray-200 w-full text-left">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="border border-gray-300 px-4 py-2">No</th>
+            <th class="border border-gray-300 px-4 py-2">Nama</th>
+            <th class="border border-gray-300 px-4 py-2">Lokasi</th>
+            <th class="border border-gray-300 px-4 py-2">Kapasitas</th>
+            <th class="border border-gray-300 px-4 py-2">Foto</th>
+            <th class="border border-gray-300 px-4 py-2 text-center">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          @forelse ($labors as $labor)
+          <tr>
+            <td class="border border-gray-300 px-4 py-2">{{ $loop->iteration }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ $labor->name }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ $labor->location }}</td>
+            <td class="border border-gray-300 px-4 py-2">{{ $labor->capacity }}</td>
+            <td class="border border-gray-300 px-4 py-2 text-center">
+              @if ($labor->photo)
+                <img src="{{ asset($labor->photo) }}" alt="{{ $labor->name }}" class="w-16 h-16 rounded-full object-cover mx-auto">
+              @else
+                <span class="text-gray-500">Tidak ada foto</span>
+              @endif
+            </td>
+            <td class="border border-gray-300 px-4 py-2 text-center">
+              <a href="{{ route('labors.show', $labor->id) }}" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">Detail</a>
+              <a href="{{ route('labors.edit', $labor->id) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">Edit</a>
+              <form action="{{ route('labors.destroy', $labor->id) }}" method="POST" style="display: inline;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm" onclick="return confirm('Hapus labor ini?')">Hapus</button>
+              </form>
+            </td>
+          </tr>
+          @empty
+          <tr>
+            <td colspan="6" class="border border-gray-300 px-4 py-2 text-center text-gray-500">Tidak ada data labor.</td>
+          </tr>
+          @endforelse
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <script>
     function toggleDropdown() {
       const dropdown = document.getElementById('dropdown');
       dropdown.classList.toggle('hidden');
     }
   </script>
-
 </body>
 </html>
