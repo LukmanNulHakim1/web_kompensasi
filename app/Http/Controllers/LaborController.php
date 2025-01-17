@@ -33,9 +33,9 @@ class LaborController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
-            'capacity' => 'required|integer',
+            'capacity' => 'required|integer|min:1',
             'description' => 'required|string',
-            'facilities' => 'required|string',
+            'facilities' => 'required|string', // Input fasilitas dipisahkan dengan koma
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validasi foto
         ]);
 
@@ -45,7 +45,10 @@ class LaborController extends Controller
         $labor->location = $request->input('location');
         $labor->capacity = $request->input('capacity');
         $labor->description = $request->input('description');
-        $labor->facilities = $request->input('facilities');
+
+        // Konversi fasilitas menjadi JSON
+        $facilitiesArray = array_map('trim', explode(',', $request->input('facilities')));
+        $labor->facilities = json_encode($facilitiesArray); // Simpan sebagai JSON
 
         // Cek apakah foto ada, lalu simpan
         if ($request->hasFile('photo')) {
@@ -60,6 +63,7 @@ class LaborController extends Controller
 
         return redirect()->route('labors.index')->with('success', 'Labor berhasil ditambahkan!');
     }
+
 
     /**
      * Display the specified resource.
@@ -88,12 +92,20 @@ class LaborController extends Controller
             'location' => 'required|string|max:255',
             'capacity' => 'required|integer',
             'description' => 'required|string',
-            'facilities' => 'required|string',
+            'facilities' => 'required|string', // Validasi fasilitas sebagai string
             'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
+        // Ubah fasilitas menjadi JSON
+        $validated['facilities'] = json_encode(array_map('trim', explode(',', $validated['facilities'])));
+
         // Periksa jika ada foto baru yang diupload
         if ($request->hasFile('photo')) {
+            // Hapus foto lama jika ada
+            if ($labor->photo && file_exists(public_path($labor->photo))) {
+                unlink(public_path($labor->photo));
+            }
+
             // Menyimpan foto baru
             $path = $request->file('photo')->store('images', 'public');
             $validated['photo'] = 'storage/' . $path;
@@ -115,4 +127,16 @@ class LaborController extends Controller
 
         return redirect()->route('labors.index')->with('success', 'Labor berhasil dihapus.');
     }
+
+    /* ========================== Ini Untuk Halaman User ============================== */
+    public function showPeminjamanPage(Request $request)
+    {
+        // Mengambil semua data labor dari database
+        $labors = Labor::all();
+        
+        // Mengarahkan ke view dengan data labor
+        return view('user.pinjam.index')->with('labors', $labors);   
+    }
+    
+
 }

@@ -77,6 +77,9 @@ Route::resource('admin_labor', CreateAdminLaborController::class);
 Route::prefix('user/pinjam')->name('user.pinjam.')->group(function () {
     Route::get('/', [PinjamController::class, 'index'])->name('index');
 });
+Route::get('/user/pinjam', [LaborController::class, 'showPeminjamanPage'])->name('user.pinjam.index');
+Route::get('/pinjam/{id}', [PinjamController::class, 'show'])->name('user.pinjam.show');
+
 /* ---------------------End Pinjam User ---------------------- */
 
 

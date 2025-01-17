@@ -38,20 +38,26 @@
       </div>
 
       <!-- Fasilitas -->
-      <div class="mb-4">
+      <!-- Fasilitas -->
+    <div class="mb-4">
         <label for="facilities" class="block text-gray-700 font-medium mb-2">Fasilitas</label>
-        <textarea name="facilities" id="facilities" rows="4" class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required>{{ old('facilities', $labor->facilities) }}</textarea>
-      </div>
+        <small class="text-gray-500">Pisahkan fasilitas dengan koma (misalnya: AC, Proyektor, Meja)</small>
+        <textarea name="facilities" id="facilities" rows="4" class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+            {{ old('facilities', is_array(json_decode($labor->facilities)) ? implode(', ', json_decode($labor->facilities)) : $labor->facilities) }}
+        </textarea>
+    </div>
+
 
       <!-- Foto -->
       <div class="mb-6">
         <label for="photo" class="block text-gray-700 font-medium mb-2">Foto</label>
+        <input type="file" name="photo" id="photo" class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
         @if ($labor->photo)
-          <div class="mb-2">
-            <img src="{{ asset($labor->photo) }}" alt="Foto Labor" class="w-32 h-32 object-cover rounded-md">
+          <div class="mt-2">
+            <p class="text-sm text-gray-500">Foto saat ini:</p>
+            <img src="{{ asset($labor->photo) }}" alt="Foto Labor" class="w-32 h-32 object-cover rounded-md mt-2">
           </div>
         @endif
-        <input type="file" name="photo" id="photo" class="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
       </div>
 
       <!-- Tombol -->

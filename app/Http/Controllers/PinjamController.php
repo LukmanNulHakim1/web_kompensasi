@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pinjam;
+use App\Models\Labor;
 use Illuminate\Http\Request;
 
 class PinjamController extends Controller
 {
-    public function index()
+    
+    public function show($id)
     {
-        $pinjams = Pinjam::all(); // Ambil semua data pinjam
-        return view('user.pinjam.index', compact('pinjams')); // Tampilkan ke view pinjam.index
+        $labor = Labor::findOrFail($id); // Ambil data labor berdasarkan ID
+        return view('user.pinjam.show', compact('labor')); // Pastikan 'pinjam.show' adalah view yang menampilkan detail
     }
 
 
